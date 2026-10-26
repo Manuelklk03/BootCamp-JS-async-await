@@ -66,3 +66,60 @@ async function printPugVsPikachu() {
 
   document.body.appendChild(section);
 }
+
+//7.
+async function getRandomCharacter() {
+  const response = await fetch("https://rickandmortyapi.com/api/character");
+  const data = await response.json();
+
+  const id = Math.floor(Math.random() * data.info.count) + 1;
+
+  const characterResponse = await fetch(
+    `https://rickandmortyapi.com/api/character/${id}`,
+  );
+  const character = await characterResponse.json();
+
+  return character;
+}
+
+//8.
+async function getRandomCharacterInfo() {
+  const character = await getRandomCharacter();
+
+  const img = character.image;
+  const name = character.name;
+  const episodes = character.episode;
+
+  const response = await fetch(episodes[0]);
+  const episodeData = await response.json();
+
+  const firstEpisode = episodeData.name;
+  const dateEpisode = episodeData.air_date;
+
+  return { img, name, episodes, firstEpisode, dateEpisode };
+}
+
+//9.
+async function printRandomCharacterInfo() {
+  const character = await getRandomCharacterInfo();
+
+  const section = document.createElement("section");
+
+  const episodes = character.episodes.map((url) => url.split("/").pop());
+
+  section.innerHTML = `
+        <h2>${character.name}</h2>
+        <img src="${character.img}" alt="${character.name}">
+        <p>Episodios: ${episodes.join(", ")}</p>
+        <p>Primer episodio: ${character.firstEpisode}</p>
+        <p>Fecha de estreno: ${character.dateEpisode}</p>
+    `;
+
+  document.body.appendChild(section);
+}
+
+//Para que aparezcan el 6 y el 9
+document.addEventListener("DOMContentLoaded", () => {
+  printPugVsPikachu();
+  printRandomCharacterInfo();
+});
