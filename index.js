@@ -39,3 +39,30 @@ async function printImageAndName() {
     <h1>${pokemon.name}</h1>
 </section>`;
 }
+
+//4.
+async function getRandomDogImage() {
+  const response = await fetch("https://dog.ceo/api/breeds/image/random");
+  const data = await response.json();
+
+  return data.message;
+}
+
+//6.
+async function printPugVsPikachu() {
+  const response = await fetch("https://dog.ceo/api/breed/pug/images/random");
+  const dog = await response.json();
+
+  const pikachu = await getImageAndName("pikachu");
+
+  const section = document.createElement("section");
+
+  section.innerHTML = `
+        <h2>Pug VS Pikachu</h2>
+        <img src="${dog.message}" alt="Pug">
+        <h2>VS</h2>
+        <img src="${pikachu.img}" alt="Pikachu">
+    `;
+
+  document.body.appendChild(section);
+}
